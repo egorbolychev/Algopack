@@ -16,15 +16,15 @@ func ParseTicketData(ctx context.Context, title string, wg *sync.WaitGroup) ([]b
 	defer wg.Done()
 	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", title)
 	res, err := http.Get(apiUrl)
+	if err != nil {
+		return nil, err
+	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
 			log.Fatalln(err)
 		}
 	}(res.Body)
-	if err != nil {
-		return nil, err
-	}
 	bodyData, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
