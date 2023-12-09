@@ -2,28 +2,19 @@ package parse
 
 import (
 	"algopack/internal/model"
+	"algopack/pkg/ctxtool"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
+	"sync"
 )
 
-func ParseTicketData(w http.ResponseWriter, request *http.Request) []byte {
-
-	decoder := json.NewDecoder(request.Body)
-	var ticket struct {
-		Title string `json:"ticket"`
-	}
-
-	err := decoder.Decode(&ticket)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		panic(err)
-	}
-	fmt.Println(ticket.Title)
-
-	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", ticket.Title)
+func ParseTicketData(title string, wg *sync.WaitGroup, ctx context.Context) []byte {
+	defer wg.Done()
+	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", title)
 	res, err := http.Get(apiUrl)
 	if err != nil {
 		panic(err)
@@ -43,7 +34,7 @@ func ParseTicketData(w http.ResponseWriter, request *http.Request) []byte {
 	}
 
 	ticketMap := buildingTicketMap(tradeData)
-
+	ctxtool.Logger(ctx).Info("etiquette information " + title + " collected")
 	latestTicketDataJSON, err := json.Marshal(ticketMap)
 	if err != nil {
 		panic(err)

@@ -55,7 +55,7 @@ func mainIteration(ctx context.Context) {
 
 		default:
 			ctxtool.Logger(ctx).Info("new iteration started")
-			app.TradingIteration()
+			app.TradingIteration(ctx)
 		}
 		time.Sleep(time.Second)
 	}
