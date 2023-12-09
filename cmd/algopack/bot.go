@@ -1,14 +1,15 @@
 package algopack
 
 import (
-	"algopack/internal/app"
-	"algopack/pkg/ctxtool"
 	"context"
-	"go.uber.org/zap"
 	"log"
 	"time"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
+
+	"algopack/internal/app"
+	"algopack/pkg/ctxtool"
 )
 
 var (
@@ -33,6 +34,7 @@ func init() {
 
 func runTrade(_ *cobra.Command, _ []string) {
 	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
 
 	ctxWithLogger, err := configureLogger(ctx)
 	if err != nil {
@@ -44,7 +46,8 @@ func runTrade(_ *cobra.Command, _ []string) {
 	go mainIteration(ctxWithLogger)
 
 	time.Sleep(time.Duration(workTime) * time.Minute)
-	cancel()
+
+	ctxtool.Logger(ctxWithLogger).Info("Bot stopped")
 }
 
 func mainIteration(ctx context.Context) {

@@ -1,8 +1,6 @@
 package parse
 
 import (
-	"algopack/internal/api"
-	"algopack/pkg/ctxtool"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -12,6 +10,8 @@ import (
 	"sync"
 
 	"algopack/internal/model"
+  "algopack/internal/api"
+	"algopack/pkg/ctxtool"
 )
 
 func ParseTicketData(ctx context.Context, title string, wg *sync.WaitGroup) ([]byte, error) {
