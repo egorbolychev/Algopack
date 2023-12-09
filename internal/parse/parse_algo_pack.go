@@ -7,15 +7,13 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"sync"
 
+	"algopack/internal/api"
 	"algopack/internal/model"
-  "algopack/internal/api"
 	"algopack/pkg/ctxtool"
 )
 
-func ParseTicketData(ctx context.Context, title string, wg *sync.WaitGroup) ([]byte, error) {
-	defer wg.Done()
+func ParseTicketData(ctx context.Context, title string) ([]byte, error) {
 	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", title)
 	res, err := http.Get(apiUrl)
 	if err != nil {
