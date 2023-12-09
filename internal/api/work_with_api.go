@@ -1,6 +1,7 @@
 package api
 
 import (
+	"algopack/pkg/ctxtool"
 	"bytes"
 	"context"
 	"encoding/json"
@@ -45,6 +46,7 @@ func GetPredictByTicket(ctx context.Context, latestTicketData []interface{}) ([]
 	if err != nil {
 		return nil, err
 	}
+	ctxtool.Logger(ctx).Info("Success getting predict")
 
 	ticketPredictJSON, err := json.Marshal(ticketPredict)
 	if err != nil {
