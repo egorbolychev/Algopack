@@ -1,14 +1,15 @@
 package algopack
 
 import (
-	"algopack/internal/app"
-	"algopack/pkg/ctxtool"
 	"context"
-	"go.uber.org/zap"
 	"log"
 	"time"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
+
+	"algopack/internal/app"
+	"algopack/pkg/ctxtool"
 )
 
 var (
