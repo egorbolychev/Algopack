@@ -1,10 +1,11 @@
 package app
 
 import (
-	"algopack/internal/parse"
 	"algopack/pkg/ctxtool"
 	"context"
 	"sync"
+
+	"algopack/internal/parse"
 )
 
 const (
