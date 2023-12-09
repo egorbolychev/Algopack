@@ -20,6 +20,7 @@ func TradingIteration(ctx context.Context) {
 
 	for _, ticket := range tickets {
 		wg.Add(1)
+		ticket := ticket
 		go func() {
 			_, err := parse.ParseTicketData(ctx, ticket, &wg)
 			if err != nil {
