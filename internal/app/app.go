@@ -6,8 +6,15 @@ import (
 	"sync"
 )
 
+const (
+	SBER = "SBER"
+	MOEX = "MOEX"
+	MGNT = "MGNT"
+)
+
+var tickets = [...]string{SBER, MOEX, MGNT}
+
 func TradingIteration(ctx context.Context) {
-	tickets := []string{"SBER", "MOEX", "MGNT"}
 	var wg sync.WaitGroup
 
 	for _, ticket := range tickets {
