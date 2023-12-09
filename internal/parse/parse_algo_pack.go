@@ -2,21 +2,14 @@ package parse
 
 import (
 	"context"
-
 	"encoding/json"
-
 	"fmt"
-
 	"io"
-
 	"log"
-
 	"net/http"
-
 	"sync"
 
 	"algopack/internal/model"
-
 	"algopack/pkg/ctxtool"
 )
 
