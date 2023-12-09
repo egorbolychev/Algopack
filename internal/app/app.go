@@ -1,10 +1,11 @@
 package app
 
 import (
-	"algopack/internal/parse"
-	"algopack/pkg/ctxtool"
 	"context"
 	"sync"
+
+	"algopack/internal/parse"
+  "algopack/pkg/ctxtool"
 )
 
 const (
@@ -21,6 +22,7 @@ func TradingIteration(ctx context.Context) {
 	for _, ticket := range tickets {
 		wg.Add(1)
 		ticket := ticket
+    
 		go func() {
 			_, err := parse.ParseTicketData(ctx, ticket, &wg)
 			if err != nil {

@@ -10,6 +10,7 @@ import (
 	"sync"
 
 	"algopack/internal/model"
+  "algopack/internal/api"
 	"algopack/pkg/ctxtool"
 )
 
@@ -36,11 +37,9 @@ func ParseTicketData(ctx context.Context, title string, wg *sync.WaitGroup) ([]b
 	if err != nil {
 		return nil, err
 	}
-
 	ctxtool.Logger(ctx).Info("etiquette information " + title + " collected")
-	latestTicketDataJSON, err := json.Marshal(tradeData.Data.Data[len(tradeData.Data.Data)-1])
 	if err != nil {
 		return nil, err
 	}
-	return latestTicketDataJSON, nil
+	return api.GetPredictByTicket(ctx, tradeData.Data.Data[len(tradeData.Data.Data)-1])
 }
