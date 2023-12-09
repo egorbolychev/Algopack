@@ -1,7 +1,9 @@
 package app
 
 import (
+	"algopack/internal/api"
 	"context"
+	"fmt"
 	"sync"
 
 	"algopack/internal/parse"
@@ -12,9 +14,12 @@ const (
 	SBER = "SBER"
 	MOEX = "MOEX"
 	MGNT = "MGNT"
+	AQUA = "AQUA"
+	FLOT = "FLOT"
+	QIWI = "QIWI"
 )
 
-var tickets = [...]string{SBER, MOEX, MGNT}
+var tickets = [...]string{SBER, MOEX, MGNT, AQUA, FLOT, QIWI}
 
 func TradingIteration(ctx context.Context) {
 	var wg sync.WaitGroup
@@ -25,10 +30,18 @@ func TradingIteration(ctx context.Context) {
 		go func(ticket string) {
 			defer wg.Done()
 
-			_, err := parse.ParseTicketData(ctx, ticket)
+			ticketData, err := parse.ParseTicketData(ctx, ticket)
+			if err != nil {
+				ctxtool.Logger(ctx).Error(err.Error())
+				return
+			}
+
+			result, err := api.GetPredictByTicket(ctx, ticketData)
 			if err != nil {
 				ctxtool.Logger(ctx).Error(err.Error())
 			}
+
+			ctxtool.Logger(ctx).Info(fmt.Sprintf("result for ticker %s is %v", result.Title, result.Predict))
 		}(ticket)
 	}
 	wg.Wait()

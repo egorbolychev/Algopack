@@ -12,7 +12,7 @@ import (
 	"algopack/internal/model"
 )
 
-func GetPredictByTicket(ctx context.Context, latestTicketData []interface{}) ([]byte, error) {
+func GetPredictByTicket(ctx context.Context, latestTicketData []interface{}) (*model.TicketPredict, error) {
 	ticketData := model.TicketData{
 		Ticket: latestTicketData,
 	}
@@ -40,15 +40,11 @@ func GetPredictByTicket(ctx context.Context, latestTicketData []interface{}) ([]
 		return nil, err
 	}
 
-	var ticketPredict model.TicketPredict
-	err = json.Unmarshal(bodyData, &ticketPredict)
+	var ticketPredict *model.TicketPredict
+	err = json.Unmarshal(bodyData, ticketPredict)
 	if err != nil {
 		return nil, err
 	}
 
-	ticketPredictJSON, err := json.Marshal(ticketPredict)
-	if err != nil {
-		return nil, err
-	}
-	return ticketPredictJSON, nil
+	return ticketPredict, nil
 }

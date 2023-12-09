@@ -8,12 +8,11 @@ import (
 	"log"
 	"net/http"
 
-	"algopack/internal/api"
 	"algopack/internal/model"
 	"algopack/pkg/ctxtool"
 )
 
-func ParseTicketData(ctx context.Context, title string) ([]byte, error) {
+func ParseTicketData(ctx context.Context, title string) ([]interface{}, error) {
 	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", title)
 	res, err := http.Get(apiUrl)
 	if err != nil {
@@ -39,5 +38,5 @@ func ParseTicketData(ctx context.Context, title string) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	return api.GetPredictByTicket(ctx, tradeData.Data.Data[len(tradeData.Data.Data)-1])
+	return tradeData.Data.Data[len(tradeData.Data.Data)-1], nil
 }
