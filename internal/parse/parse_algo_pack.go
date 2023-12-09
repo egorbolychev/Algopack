@@ -12,31 +12,34 @@ import (
 	"sync"
 )
 
-func ParseTicketData(title string, wg *sync.WaitGroup, ctx context.Context) []byte {
+func ParseTicketData(ctx context.Context, title string, wg *sync.WaitGroup) ([]byte, error) {
 	defer wg.Done()
 	apiUrl := fmt.Sprintf("https://iss.moex.com/iss/datashop/algopack/eq/tradestats/%s.json", title)
 	res, err := http.Get(apiUrl)
-	if err != nil {
-		panic(err)
-	}
-	bodyData, err := io.ReadAll(res.Body)
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
 			log.Fatalln(err)
 		}
 	}(res.Body)
+	if err != nil {
+		return nil, err
+	}
+	bodyData, err := io.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	var tradeData model.TradeData
 	err = json.Unmarshal(bodyData, &tradeData)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	ctxtool.Logger(ctx).Info("etiquette information " + title + " collected")
 	latestTicketDataJSON, err := json.Marshal(tradeData.Data.Data[len(tradeData.Data.Data)-1])
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
-	return latestTicketDataJSON
+	return latestTicketDataJSON, nil
 }

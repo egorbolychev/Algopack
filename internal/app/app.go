@@ -2,6 +2,7 @@ package app
 
 import (
 	"algopack/internal/parse"
+	"algopack/pkg/ctxtool"
 	"context"
 	"sync"
 )
@@ -19,7 +20,12 @@ func TradingIteration(ctx context.Context) {
 
 	for _, ticket := range tickets {
 		wg.Add(1)
-		go parse.ParseTicketData(ticket, &wg, ctx)
+		go func() {
+			_, err := parse.ParseTicketData(ctx, ticket, &wg)
+			if err != nil {
+				ctxtool.Logger(ctx).Error(err.Error())
+			}
+		}()
 	}
 	wg.Wait()
 }
