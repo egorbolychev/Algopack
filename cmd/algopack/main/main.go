@@ -1,8 +1,9 @@
 package main
 
 import (
-	"algopack/cmd/algopack"
 	"log"
+
+	"algopack/cmd/algopack"
 )
 
 func main() {
